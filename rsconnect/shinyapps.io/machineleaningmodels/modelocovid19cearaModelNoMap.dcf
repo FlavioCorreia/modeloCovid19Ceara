@@ -1,0 +1,13 @@
+name: modelocovid19cearaModelNoMap
+title: modelocovid19cearaModelNoMap
+username:
+account: machineleaningmodels
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3338077
+bundleId: 3933940
+url: https://machineleaningmodels.shinyapps.io/modelocovid19cearaModelNoMap/
+when: 1606929101.32169
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: recursos.csv
