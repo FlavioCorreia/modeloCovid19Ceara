@@ -1,0 +1,131 @@
+---
+author:   |
+  | Departamento de Evaluación de Tecnologías Sanitarias y Economía de la Salud 
+  | Centro de Implementación e Innovación en Políticas de Salud 
+  | Instituto de Efectividad Clínica y Sanitaria, Buenos Aires, Argentina
+title: "Impacto del COVID-19 en los sistemas de salud de Latinoamérica y el Caribe"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document
+header-includes:
+  - \usepackage{float}
+  - \usepackage{multirow}
+  - \usepackage{array}
+  - \usepackage{booktabs}
+  - \usepackage{colortbl}
+  - \usepackage{titling}
+  - \pretitle{\begin{center}
+    \includegraphics[width=2in,height=2in]{www/iecslogo.png}\LARGE\\}
+  - \posttitle{\end{center}}
+params: 
+  pais: NA
+  hoy: NA
+  tabla_results: NA
+  data: NA
+  tabla_inputs: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, message = F, warning = F)
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(gridExtra)
+```
+
+## `r params$pais`
+
+Esta hoja de reporte es resultado de la simulación realizada en la plataforma, versión `r versionModelo` ( [iecs.org.ar/modelo-covid19](http://shinyapps.iecs.org.ar/modelo-covid19/)). Se presentan los resultados y parámetros configurados.
+
+### Resultados
+
+```{r, fig.width=6, fig.height=4}
+gi <- params$data %>%
+        mutate(fecha = as.Date(fecha),
+               Infectados = as.integer(i_5d_ma)) %>%
+        ggplot() +
+        geom_line(aes(fecha, Infectados),color = "#3a3a3b") +
+        geom_vline(xintercept = as.Date(hoy), linetype = "dashed", color="grey")+
+        theme_classic(base_size = 8) +
+        labs(x="Fecha") +
+        ggtitle("Nuevos Infectados")+
+        theme(plot.title = element_text(size = 10, face = "italic"))
+gm <- params$data %>%
+        mutate(fecha = as.Date(fecha),
+               Muertes = as.integer(muertesDiariasProyeccion)) %>%
+        ggplot() +
+        geom_line(aes(fecha, Muertes),color = "#3a3a3b") +
+        geom_vline(xintercept = as.Date(hoy), linetype = "dashed", color="grey")+
+        theme_classic(base_size = 8) +
+        labs(x="Fecha") +
+        ggtitle("Nuevas Muertes")+
+        theme(plot.title = element_text(size = 10, face = "italic"))
+gcc <- params$data %>%
+        mutate(fecha = as.Date(fecha),
+               Camas = as.integer(HHRR.criticCareBeds)) %>%
+        ggplot() +
+        geom_line(aes(fecha, Camas),color = "#3a3a3b") +
+        geom_vline(xintercept = as.Date(hoy), linetype = "dashed", color="grey")+
+        geom_hline(yintercept = camasCriticas * porcentajeDisponibilidadCamasCOVID, linetype="dashed", color="red")+
+        theme_classic(base_size = 8) +
+        labs(x="Fecha") +
+        ggtitle("Camas Críticas")+
+        theme(plot.title = element_text(size = 10, face = "italic"))+     
+        ggplot2::annotate("text",x=as.Date("2020-07-01"),
+                          y=camasCriticas * porcentajeDisponibilidadCamasCOVID * 1.1,
+                            color="red",label="Camas disponibles",size=3)
+gv <- params$data %>%
+        mutate(fecha = as.Date(fecha),
+               Vents = as.integer(HHRR.ventilators)) %>%
+        ggplot() +
+        geom_line(aes(fecha, Vents),color = "#3a3a3b") +
+        geom_vline(xintercept = as.Date(hoy), linetype = "dashed", color="grey")+
+        geom_hline(yintercept = ventiladores * porcentajeDisponibilidadCamasCOVID, linetype="dashed", color="red")+
+        theme_classic(base_size = 8) +
+        labs(x="Fecha") +
+        ggtitle("Ventiladores")+
+        theme(plot.title = element_text(size = 10, face = "italic"))+     
+        ggplot2::annotate("text",x=as.Date("2020-07-01"),
+                          y=ventiladores * porcentajeDisponibilidadCamasCOVID * 1.1,
+                            color="red",label="Ventiladores disponibles",size=3)
+grid.arrange(
+  gi,
+  gm,
+  gcc,
+  gv,
+  nrow = 2
+)
+```
+
+Aquí se detallan los resultados principales:
+
+```{r dddd, echo=F}
+params$tabla_results %>%
+  knitr::kable(format = 'latex', booktabs = T, align = "c") 
+# %>% kable_styling(latex_options = c("striped"))
+```
+
+### Inputs utilizados
+
+```{r, fig.width=6, fig.height=3}
+params$data %>%
+        mutate(fecha = as.Date(fecha),
+               R = RtEstimado) %>%
+        filter(fecha>=hoy) %>% 
+        ggplot() +
+        geom_line(aes(fecha, R),color = "#3a3a3b") +
+        geom_vline(xintercept = as.Date(hoy), linetype = "dashed", color="grey")+
+        theme_classic(base_size = 8) +
+        labs(x="Fecha") +
+        scale_y_continuous(n.breaks = 10) +
+        ggtitle("R utilizado para la proyección")+
+        theme(plot.title = element_text(size = 10, face = "italic"))
+```
+
+```{r}
+params$tabla_inputs %>%
+  knitr::kable(format = 'latex', booktabs = T, align = "c") 
+# %>% kable_styling(latex_options = c("striped"))
+
+```
+

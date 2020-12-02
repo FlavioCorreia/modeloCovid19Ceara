@@ -1,0 +1,30 @@
+https://www.saude.ce.gov.br/2020/05/11/ceara-amplia-numero-de-leitos-durante-a-pandemia/#:~:text=Deste%20total%2C%20481%20s%C3%A3o%20leitos,%C3%9Anico%20de%20Sa%C3%BAde%20(SUS).
+
+	ANTIGOS			NOVOS		TOTAL
+UTI = 	730 		+ 	481 	= 	1111
+ENF =      			1521 	= 	
+
+https://diariodonordeste.verdesmares.com.br/metro/numero-de-medicos-no-ceara-ultrapassa-11-mil-mas-distribuicao-ainda-e-problema-1.1463006
+
+MED =	11.043
+
+https://www.arcgis.com/apps/opsdashboard/index.html#/550f6af7cf5841dcbc75d25da525999c
+
+ENF =	10466
+
+https://www.arcgis.com/apps/opsdashboard/index.html#/ae011b55a6c741dabc5ff63873428c3e
+
+RESP=	1485
+
+Foi escolhido um valor de 8-15% para os profissionais dedicados ao tratamento direto dos pacientes com COVID
+
+https://indicadores.integrasus.saude.ce.gov.br/indicadores/indicadores-coronavirus/repro-efetiva-rt
+
+RT = 
+
+https://epiforecasts.io/covid/posts/national/brazil/
+
+
+Rt e R0
+Rt Taxa de transmissão
+R0 número inicial de infecções
